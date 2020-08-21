@@ -48,6 +48,7 @@ def vflip(height):
         [0, 0, 1]
     ], dtype=np.float32)
 
+
 def shear(shr_x, shr_y):
     m = identity()
     m[0, 1] = shr_x
