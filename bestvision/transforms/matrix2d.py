@@ -53,17 +53,3 @@ def shear(shr_x, shr_y):
     m[0, 1] = shr_x
     m[1, 0] = shr_y
     return m
-
-if __name__ == "__main__":
-    import cv2
-    import bestvision.assets as assets
-    print(scale(2))
-    print(scale([0.5, 2]))
-    print(translate(100))
-    print(translate((100, -200)))
-    print(rotate(30 * np.pi/180))
-    print(center_rotate_scale_cw((100, 100), 30, 2))
-    print(hflip(100))
-    print(vflip(300))
-    print(shear(0.5, 0.5))
-
