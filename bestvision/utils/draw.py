@@ -26,11 +26,12 @@ def draw_keypoints(image, keypoints, colors=None, radius=1):
     keypoints = keypoints.reshape(keypoints.shape[0], -1, 2)
     keypoints = (keypoints * multiplier).astype(np.int32)
 
-
+    default_color = (0, 255, 0)
+    
     for shape in keypoints:
         for i, pt in enumerate(shape):
             pt = tuple(pt.tolist())
             # TODO: different color for each index
-            cv.circle(image, pt, radius=radius, thickness=radius, shift=shiftbits)
+            cv.circle(image, pt, color=default_color, radius=radius, thickness=radius, shift=shiftbits)
         
     return image

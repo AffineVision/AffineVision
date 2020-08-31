@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import tqdm
 from pathlib import Path
 
 from .base import TDataset
@@ -8,7 +9,7 @@ from .base import TDataset
 class WiderFace(TDataset):
     def __init__(self, data_dir, is_test=False):
         self.is_test = is_test
-        self.data = list(self._parse(Path(data_dir)))
+        self.data = list(tqdm.tqdm(self._parse(Path(data_dir)), desc=f'Parsing {data_dir}'))
     
     def __len__(self,):
         return len(self.data)
@@ -66,4 +67,3 @@ class WiderFace(TDataset):
                 item.update(keypoints=keypoints, flags=np.array(flags))
             
             yield item
-
