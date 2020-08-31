@@ -1,20 +1,14 @@
+import numpy as np
 from torch.utils.data import Dataset
 
 
 class ADataset(Dataset):
     def __matmul__(self, transform):
-        return TDataset(self, transform)
-
-
-class TDataset(ADataset):
-    def __init__(self, source, transform):
-        self.source = source
-        assert callable(transform), "transform should be callable!"
-        self.transform = transform
-
-    def __len__(self):
-        return len(self.source)
-
-    def __getitem__(self, item):
-        item = self.source[item]
-        return self.transform(item)
+        assert callable(transform), "transform should be callable"
+        class _DerivedClass(self.__class__):
+            def __getitem__(self, index):
+                item = super().__getitem__(index)
+                item = transform(item)
+                return item
+        self.__class__ = _DerivedClass
+        return self
