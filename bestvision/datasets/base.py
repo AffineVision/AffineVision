@@ -3,7 +3,7 @@ import numpy as np
 from torch.utils.data import Dataset
 
 
-class ADataset(Dataset):
+class TransformableDataset(Dataset):
     def __matmul__(self, transform):
         assert callable(transform), "transform should be callable"
         class _DerivedClass(self.__class__):
@@ -14,3 +14,5 @@ class ADataset(Dataset):
         result = copy.copy(self)
         result.__class__ = _DerivedClass
         return result
+
+TDataset = TransformableDataset
