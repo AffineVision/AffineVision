@@ -4,7 +4,7 @@ from torch.utils.data import Dataset
 
 
 class TransformableDataset(Dataset):
-    def __matmul__(self, transform):
+    def __or__(self, transform):
         assert callable(transform), "transform should be callable"
         class _DerivedClass(self.__class__):
             def __getitem__(self, index):
