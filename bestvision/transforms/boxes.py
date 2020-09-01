@@ -18,18 +18,32 @@ def bbox2abox(bboxes, radians=None):
     y_vec = vectors[..., 1]
     zeros = np.zeros(x_vec.shape)
     ones = np.ones(x_vec.shape)
-    aboxes = np.stack([x_vec, zeros, centers[..., 0], zeros, y_vec, centers[..., 0], zeros, zeros, ones], axis=-1)
+    aboxes = np.stack([x_vec, zeros, centers[..., 0], zeros, y_vec, centers[..., 1], zeros, zeros, ones], axis=-1)
     # reshape
     shape = (*x_vec.shape, 3, 3)
     aboxes = aboxes.reshape(shape)
 
-    # construct rotate
     if radians is not None:
         cos = np.cos(radians)
         sin = np.sin(radians)
         rotate = np.stack([cos, -sin, zeros, sin, cos, zeros, zeros, zeros, ones], axis=-1).reshape(shape)
         aboxes = rotate @ aboxes
+
     return aboxes
+
+def abox2bbox(aboxes):
+    """covnert affine boxes to bounding point box
+
+    reference: https://www.iquilezles.org/www/articles/ellipses/ellipses.htm
+
+    Args:
+        aboxes ([np.ndarray]): affine boxes shape with [*, 3, 3]
+    """
+
+    c = aboxes[..., :2, 2]
+    e = np.linalg.norm(aboxes[..., :2, :2], ord=2, axis=-1)
+    bboxes = np.concatenate([c - e, c + e], axis=-1)
+    return bboxes
 
 def bbox2cbox(bboxes):
     pass
