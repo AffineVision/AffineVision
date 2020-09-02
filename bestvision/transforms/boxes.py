@@ -4,8 +4,8 @@ import numpy as np
 # bbox means bounding box encoded with bounding points
 # cbox means bounding box encoded with center and size
 # abox means affine box encoded as affine matrix
-#                                  [x_vec,     0, cx]
-#                                  [    0, y_vec, cy]
+#                                  [  u_x,   u_y, cx]
+#                                  [  v_x,   v_y, cy]
 #                                  [    0,     0,  1]
 # rbox means bounding rotated box encoding with [cx, cy, w, h, angle]
 def bbox2abox(bboxes, radians=None):
