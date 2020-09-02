@@ -11,11 +11,15 @@ def transform(item):
     image = item['image']
     draw_bboxes(image, bboxes)
     h, w = image.shape[:2]
-    matrix = matrix2d.hflip(w) @ matrix2d.center_rotate_scale_cw((w/2, h/2), 30, 1)
+    matrix = matrix2d.shear(0.1, 0.1) @ matrix2d.hflip(w) @ matrix2d.center_rotate_scale_cw((w/2, h/2), 30, 1)
     image = warp.affine(image, matrix, (w, h))
     aboxes = matrix @ aboxes
     item['image'] = image
     item['bboxes'] = abox2bbox(aboxes)
+    points = item['keypoints'].reshape(-1, 2)
+    points = points @ matrix[:2, :2].T + matrix[:2, 2]
+    points = points.reshape(-1, 10)
+    item['keypoints'] = points
     return item
 
 
