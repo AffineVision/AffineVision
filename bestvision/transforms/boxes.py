@@ -7,7 +7,10 @@ import numpy as np
 #                                  [  u_x,   u_y, cx]
 #                                  [  v_x,   v_y, cy]
 #                                  [    0,     0,  1]
-# rbox means bounding rotated box encoding with [cx, cy, w, h, angle]
+# rbox means bounding rotated box encoding with [cx, cy, w, h, r] 
+# where r is box rotated angle in radian, and the anchor is clockwise angle
+# in image coordinate
+
 def bbox2abox(bboxes, radians=None):
     # bboxes: [*, 4]
     # radians: box angle in radian
