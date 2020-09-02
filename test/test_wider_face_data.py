@@ -21,7 +21,7 @@ def transform(item):
 
 if __name__ == "__main__":
     
-    data = WiderFace(data_dir="F:\\sujz\\Data\\WIDER_FACE\\WIDER_train")
+    data = WiderFace(data_dir="data/WIDER_FACE/WIDER_train")
 
     for item in data | transform:
         image = draw_bboxes(item['image'], item['bboxes'])

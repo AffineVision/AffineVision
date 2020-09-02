@@ -46,8 +46,19 @@ def abox2bbox(aboxes):
     return bboxes
 
 def bbox2cbox(bboxes):
-    pass
+    sizes = bboxes[..., 2:] - bboxes[..., :2]
+    centers = (bboxes[..., :2] + bboxes[..., 2:]) / 2
+    cboxes = np.concatenate([centers, sizes], axis=-1)
+    return cboxes
 
 
 def cbox2bbox(bboxes):
+    halfs = bboxes[..., 2:] / 2
+    lt = bboxes[..., :2] - halfs
+    rb = bboxes[..., 2:] + halfs
+    bboxes = np.concatenate([lt, rb], axis=-1)
+    return bboxes
+
+def cbox2abox(bboxes):
+    # TODO
     pass
