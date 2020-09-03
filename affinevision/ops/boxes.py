@@ -10,12 +10,14 @@ def bbox2cbox(bboxes):
     cboxes = torch.cat([centers, sizes], dim=-1)
     return cboxes
 
+
 def cbox2bbox(cboxes):
     halfs = cboxes[..., 2:] / 2
     lt = cboxes[..., :2] - halfs
     rb = cboxes[..., 2:] + halfs
     bboxes = torch.cat([lt, rb], dim=-1)
     return bboxes
+
 
 def box_iou_itemwise(bboxes1, bboxes2):
     # bboxes1: [*, 4]
@@ -32,8 +34,6 @@ def box_iou_itemwise(bboxes1, bboxes2):
     inter_area = torch.prod(sizes, dim=-1)
 
     return inter_area / (area1 + area2 - inter_area)
-    
-    
 
 
 def box_diou_pairwise(bboxes1, bboxes2):
