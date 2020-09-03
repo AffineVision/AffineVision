@@ -18,7 +18,22 @@ def cbox2bbox(cboxes):
     return bboxes
 
 def box_iou_itemwise(bboxes1, bboxes2):
-    pass
+    # bboxes1: [*, 4]
+    # bboxes2: [*, 4]
+    area1 = box_area(bboxes1)
+    area2 = box_area(bboxes2)
+
+    lt = torch.max(bboxes1[..., :2], bboxes2[..., :2])
+    rb = torch.min(bboxes1[..., 2:], bboxes2[..., 2:])
+
+    sizes = rb - lt
+    sizes = torch.clamp_min(sizes, 0)
+
+    inter_area = torch.prod(sizes, dim=-1)
+
+    return inter_area / (area1 + area2 - inter_area)
+    
+    
 
 
 def box_diou_pairwise(bboxes1, bboxes2):
