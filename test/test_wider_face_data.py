@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
-from bestvision.datasets.wider_face import WiderFace
-from bestvision.transforms.boxes import bbox2abox, abox2bbox
-from bestvision.utils.draw import draw_bboxes, draw_keypoints
-from bestvision.transforms import matrix2d, warp
+from affinevision.datasets.wider_face import WiderFace
+from affinevision.transforms.boxes import bbox2abox, abox2bbox
+from affinevision.utils.draw import draw_bboxes, draw_keypoints
+from affinevision.transforms import matrix2d, warp
 
 def transform(item):
     bboxes = item.pop('bboxes')

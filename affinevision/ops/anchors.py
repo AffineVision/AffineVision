@@ -33,14 +33,15 @@ class RBoxAnchors(nn.Module):
         self.register_buffer('anchors', anchors)
 
     @staticmethod
-    def generate_layer_anchors(stride, feature_size, anchor_layout):
+    def generate_layer_anchors(stride, feature_size, anchor_layout, device=None):
+        device = torch.device('cpu') if device is None else device
         anchor_layout = [_canonical_rbox_anchor(v) for v in anchor_layout]
-        anchor_layout = torch.tensor(anchor_layout, dtype=torch.float32)  # [k, 5]
+        anchor_layout = torch.tensor(anchor_layout, dtype=torch.float32, device=device)  # [k, 5]
 
         # generate offset grid
         fw, fh = feature_size
-        vx = torch.arange(0.5, fw, dtype=torch.float32) * stride
-        vy = torch.arange(0.5, fh, dtype=torch.float32) * stride
+        vx = torch.arange(0.5, fw, dtype=torch.float32, device=device) * stride
+        vy = torch.arange(0.5, fh, dtype=torch.float32, device=device) * stride
         vy, vx = torch.meshgrid(vy, vx)
         offsets = torch.stack([vx, vy], dim=-1) # [fh, fw, 2]
 
@@ -49,17 +50,18 @@ class RBoxAnchors(nn.Module):
         return anchors
 
     @staticmethod
-    def generate_anchors(strides, feature_sizes, anchor_layouts):
+    def generate_anchors(strides, feature_sizes, anchor_layouts, device=None):
         anchors = []
         for stride, feature_size, anchor_layout in zip(strides, feature_sizes, anchor_layouts):
-            layer_anchors = RBoxAnchors.generate_layer_anchors(stride, feature_size, anchor_layout)
+            layer_anchors = RBoxAnchors.generate_layer_anchors(stride, feature_size, anchor_layout, device)
             layer_anchors = layer_anchors.reshape(-1, 5)
             anchors.append(layer_anchors)
         anchors = torch.cat(anchors, dim=0)
         return anchors
 
-    def update(self, input_size, feature_sizes):
-        pass
+    def update(self, feature_sizes):
+        device = self.anchors.device
+        self.anchors = self.generate_anchors(self.strides, feature_sizes, self.anchor_layouts, device)
 
     def encode_bboxes(self, bboxes):
         pass
