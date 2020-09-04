@@ -65,3 +65,9 @@ def cbox2bbox(bboxes):
 def cbox2abox(bboxes):
     # TODO
     pass
+
+
+def bbox_affine(bboxes, matrix):
+    aboxes = bbox2abox(bboxes)
+    aboxes = matrix @ aboxes
+    return abox2bbox(aboxes)

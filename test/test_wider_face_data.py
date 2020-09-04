@@ -24,10 +24,13 @@ def transform(item):
 
 
 if __name__ == "__main__":
+    from projects.face_detection import utils
     
     data = WiderFace(data_dir="data/WIDER_FACE/WIDER_train")
 
-    for item in data | transform:
+    transformer = utils.NaiveTransformer((512, 512))
+
+    for item in data | transformer:
         image = draw_bboxes(item['image'], item['bboxes'])
         draw_keypoints(image, item['keypoints'])
         cv2.imshow("v", image)
