@@ -62,10 +62,9 @@ def cbox2bbox(bboxes):
     bboxes = np.concatenate([lt, rb], axis=-1)
     return bboxes
 
-def cbox2abox(bboxes):
-    # TODO
-    pass
-
+def cbox2abox(cboxes):
+    bboxes = cbox2bbox(cboxes)
+    return bbox2abox(bboxes)
 
 def bbox_affine(bboxes, matrix):
     aboxes = bbox2abox(bboxes)
