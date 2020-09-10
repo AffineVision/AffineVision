@@ -60,17 +60,39 @@ def bbox2cbox(bboxes):
     return cboxes
 
 
-def cbox2bbox(bboxes):
-    halfs = bboxes[..., 2:] / 2
-    lt = bboxes[..., :2] - halfs
-    rb = bboxes[..., 2:] + halfs
-    bboxes = np.concatenate([lt, rb], axis=-1)
-    return bboxes
+def cbox2bbox(cboxes):
+    halfs = cboxes[..., 2:] / 2
+    lt = cboxes[..., :2] - halfs
+    rb = cboxes[..., 2:] + halfs
+    cboxes = np.concatenate([lt, rb], axis=-1)
+    return cboxes
 
 
 def cbox2abox(cboxes):
     bboxes = cbox2bbox(cboxes)
     return bbox2abox(bboxes)
+
+
+def abox2cbox(aboxes):
+    bboxes = abox2bbox(aboxes)
+    return bbox2cbox(bboxes)
+
+
+def rbox2abox(rboxes):
+    radians = rboxes[:, -1]
+    cboxes = rboxes[:, :4]
+    bboxes = cbox2bbox(cboxes)
+    aboxes = bbox2abox(bboxes, radians)
+    return aboxes
+
+
+def abox2rbox(aboxes):
+    # aboxes [*, 3, 3]
+    radians = np.arctan2(aboxes[..., 1, 0], aboxes[..., 0, 1])
+    sizes = np.linalg.norm(aboxes[..., :2, :2], ord=2, axis=-2)
+    centers = aboxes[..., :2, 2]
+    rboxes = np.concatenate([centers, sizes, radians[..., None]], axis=-1)
+    return rboxes
 
 
 def bbox_affine(bboxes, matrix):
